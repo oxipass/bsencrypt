@@ -1,4 +1,4 @@
-package bsencryption
+package bsencrypt
 
 import (
 	"crypto/aes"

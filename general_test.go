@@ -1,4 +1,4 @@
-package bsencryption
+package bsencrypt
 
 import (
 	"math/rand"
@@ -35,7 +35,9 @@ func TestRandomStringGeneratorWrongInput(t *testing.T) {
 
 func TestFormError(t *testing.T) {
 	e := formError("BSENCRPT0001", "Error 1", "Error 2")
-	if e.Error() != "BSENCRPT0001: Error 1, Error 2" {
+	if e == nil {
+		t.Errorf("Error returns nil instead actual value")
+	} else if e.Error() != "BSENCRPT0001: Error 1, Error 2" {
 		t.Errorf("Error is not formed as expected")
 	}
 }
