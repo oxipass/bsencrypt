@@ -13,7 +13,7 @@ import (
 
 // AES256 constants
 const cCryptIDAES25601 = "8GA63DMN"
-const cAES256TextDescription = "AES256 impl 1"
+const cAES256TextDescription = "AES256V1"
 const cAESKeyLength = 32 // AES-256
 const cPassSalt = "DJLiw3;!"
 const cLoops = 32768 // Increase it with computer power
