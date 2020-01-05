@@ -10,7 +10,7 @@ type BSCipher interface {
 	SetPassword(string) error    // Password should be set before starting encryption/decryption
 	SetPasswordKey([]byte) error // Setting key from bytes array
 	GetPasswordKey() []byte      // Get password current key
-	IsKeyGenerated() bool        // Check if key is available and encryption/decryption is possible
+	//IsKeyGenerated() bool        // Check if key is available and encryption/decryption is possible
 
 	Encrypt(string) (string, error) // Encrypt string, return encrypted base64 string
 	Decrypt(string) (string, error) // Decrypt string, encrypted base64 string should be provided as input
@@ -21,7 +21,7 @@ type BSCipher interface {
 	EncryptBIN([]byte) ([]byte, error) // Encrypt bytes array, return encrypted bytes
 	DecryptBIN([]byte) ([]byte, error) // Decrypt encrypted bytes, return bytes array
 
-	GetGryptID() string    // Unique ID of cipher implementation, use any alphanumeric symbols, 8 chars
+	GetCryptID() string    // Unique ID of cipher implementation, use any alphanumeric symbols, 8 chars
 	GetCipherName() string // Human readable name of the implemented cypher
 }
 

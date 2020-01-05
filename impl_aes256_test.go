@@ -5,7 +5,7 @@ import "testing"
 const cAES256InitialText = "23nrn 2rjnc87smlk,d4of9`94384;"
 const cAES256Password = "Mj577;tf,QQ"
 
-func TestAES256EncyptDecrypt(t *testing.T) {
+func TestAES256EncryptDecrypt(t *testing.T) {
 	var aesWrapper cipherAES256
 	err := aesWrapper.SetPassword(cAES256Password)
 	if err != nil {

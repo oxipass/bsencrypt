@@ -43,7 +43,7 @@ func TestFormError(t *testing.T) {
 }
 
 func TestRandomBytesGenerator(t *testing.T) {
-	genBytes := generateRandomBytes(4, 10)
+	genBytes := generateRandomBytesWithRandomLen(4, 10)
 	genLen := len(genBytes)
 	if genLen < 4 || genLen > 10 {
 		t.Errorf("Wrong length array is generated")
@@ -51,18 +51,18 @@ func TestRandomBytesGenerator(t *testing.T) {
 }
 
 func TestRandomBytesGeneratorFailure(t *testing.T) {
-	genBytes := generateRandomBytes(5, 4)
+	genBytes := generateRandomBytesWithRandomLen(5, 4)
 	if genBytes != nil {
 		t.Errorf("Wrong parameters not processed correctly, max is less than min but array is generated")
 	}
 }
 
-func TestCyperNamesAndIDs(t *testing.T) {
+func TestCypherNamesAndIDs(t *testing.T) {
 	for _, cipher := range Ciphers {
-		if len(cipher.GetGryptID()) == 0 {
+		if len(cipher.GetCryptID()) == 0 {
 			t.Errorf("Crypt ID cannot be emtpy, should be 8")
-		} else if len(cipher.GetGryptID()) != 8 {
-			t.Errorf("Wrong length of crypt ID, should be 8, CryptID: %s", cipher.GetGryptID())
+		} else if len(cipher.GetCryptID()) != 8 {
+			t.Errorf("Wrong length of crypt ID, should be 8, CryptID: %s", cipher.GetCryptID())
 		}
 		if len(cipher.GetCipherName()) == 0 {
 			t.Errorf("Human readable cipher name is empty, should be at least 3 symbols")

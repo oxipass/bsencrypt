@@ -42,7 +42,7 @@ func generateRandomString(lenFrom, lenTo int) string {
 	return finalString
 }
 
-func generateRandomBytes(lenFrom, lenTo int) []byte {
+func generateRandomBytesWithRandomLen(lenFrom, lenTo int) []byte {
 	lenMax := lenTo - lenFrom
 
 	if lenMax <= 0 {

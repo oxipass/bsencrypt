@@ -11,28 +11,27 @@ import (
 	"golang.org/x/crypto/scrypt"
 )
 
-// AES256 consts
-const cryptIDAES256 = "8GA63DMN"
-const aes256 = "AES256"
-const constAESkeyLength = 32 // AES-256
-const constSaltString = "DJVJOT2K1RSVTBQqnxijkiwIz0LhGvUO"
+// AES256 constants
+const cCryptIDAES25601 = "8GA63DMN"
+const cAES256TextDescription = "AES256 impl 1"
+const cAESKeyLength = 32 // AES-256
+const cPassSalt = "DJLiw3;!"
+const cLoops = 32768 // Increase it with computer power
 
 type cipherAES256 struct {
-	generatedKey []byte
-	passwordKey  []byte
+	passwordKey []byte
 }
 
 func (cipher256 *cipherAES256) CleanAndInit() {
-	cipher256.generatedKey = nil
 	cipher256.passwordKey = nil
 }
 
-func (cipher256 cipherAES256) GetGryptID() string {
-	return cryptIDAES256
+func (cipher256 cipherAES256) GetCryptID() string {
+	return cCryptIDAES25601
 }
 
 func (cipher256 cipherAES256) GetCipherName() string {
-	return aes256
+	return cAES256TextDescription
 }
 func (cipher256 *cipherAES256) SetPassword(password string) (err error) {
 
@@ -45,10 +44,11 @@ func (cipher256 *cipherAES256) SetPassword(password string) (err error) {
 }
 
 func (cipher256 cipherAES256) makePasswordKey(password string) (keyDataOut []byte) {
-	if len(password) < constAESkeyLength {
-		password = password + constSaltString
+	passWithSalt := password + cPassSalt
+	for len(passWithSalt) < cAESKeyLength {
+		passWithSalt += passWithSalt
 	}
-	return []byte(password)
+	return []byte(passWithSalt)
 }
 
 func (cipher256 cipherAES256) GetPasswordKey() []byte {
@@ -56,32 +56,21 @@ func (cipher256 cipherAES256) GetPasswordKey() []byte {
 }
 
 func (cipher256 *cipherAES256) SetPasswordKey(keyDataIn []byte) (err error) {
-	if len(keyDataIn) < constAESkeyLength {
-		return formError(BSENCRPT0002WrongKeyLength, aes256, "SetPasswordKey", "Key length must be  at least 32 bytes")
+	if len(keyDataIn) < cAESKeyLength {
+		return formError(BSENCRPT0002WrongKeyLength, cAES256TextDescription, "SetPasswordKey", "Key length must be  at least 32 bytes")
 	}
 	cipher256.passwordKey = keyDataIn
-	salt := []byte(constSaltString)
-	cipher256.generatedKey, err = scrypt.Key(keyDataIn, salt, 16384, 8, 1, constAESkeyLength)
-	if err != nil {
-		return err
-	}
 	return nil
 }
 
-func (cipher256 cipherAES256) IsKeyGenerated() bool {
-	if cipher256.passwordKey == nil ||
-		cipher256.generatedKey == nil ||
-		len(cipher256.generatedKey) != constAESkeyLength {
+func (cipher256 cipherAES256) isPasswordSet() bool {
+	if cipher256.passwordKey == nil {
 		return false
 	}
 	return true
 }
 
 func (cipher256 *cipherAES256) Encrypt(text string) (string, error) {
-	if cipher256.IsKeyGenerated() == false {
-		return "", formError(BSENCRPT0001EncKeyIsNotSet, aes256, "Encrypt")
-	}
-
 	encryptedData, err := cipher256.EncryptBLOB(text)
 	if err != nil {
 		return "", err
@@ -91,9 +80,6 @@ func (cipher256 *cipherAES256) Encrypt(text string) (string, error) {
 }
 
 func (cipher256 *cipherAES256) EncryptBLOB(text string) ([]byte, error) {
-	if cipher256.IsKeyGenerated() == false {
-		return nil, formError(BSENCRPT0001EncKeyIsNotSet, aes256, "EncryptBLOB")
-	}
 	plainData := []byte(text)
 	encryptedData, err := cipher256.EncryptBIN(plainData)
 	if err != nil {
@@ -103,11 +89,15 @@ func (cipher256 *cipherAES256) EncryptBLOB(text string) ([]byte, error) {
 }
 
 func (cipher256 *cipherAES256) EncryptBIN(inData []byte) (outData []byte, err error) {
-	if cipher256.IsKeyGenerated() == false {
+	if cipher256.isPasswordSet() == false {
 		return nil, formError(BSENCRPT0001EncKeyIsNotSet)
 	}
 
-	block, err := aes.NewCipher(cipher256.generatedKey)
+	generatedKey, err := scrypt.Key(cipher256.passwordKey, nil, cLoops, 8, 1, cAESKeyLength)
+	if err != nil {
+		return nil, err
+	}
+	block, err := aes.NewCipher(generatedKey)
 	if err != nil {
 		return nil, formError("aes.NewCipher", err.Error())
 	}
@@ -123,11 +113,6 @@ func (cipher256 *cipherAES256) EncryptBIN(inData []byte) (outData []byte, err er
 }
 
 func (cipher256 *cipherAES256) Decrypt(cryptedText string) (string, error) {
-
-	if cipher256.IsKeyGenerated() == false {
-		return "", formError(BSENCRPT0001EncKeyIsNotSet, aes256, "Decrypt")
-	}
-
 	dataIn, err := base64.URLEncoding.DecodeString(cryptedText)
 
 	if err != nil {
@@ -139,32 +124,10 @@ func (cipher256 *cipherAES256) Decrypt(cryptedText string) (string, error) {
 		return "", err
 	}
 
-	/*
-		block, err := aes.NewCipher(cipher256.generatedKey)
-
-		if err != nil {
-			return "", err
-		}
-
-		if len(ciphertext) < aes.BlockSize {
-			return "", errors.New("Cipher text is too short for AES")
-		}
-
-		iv := ciphertext[:aes.BlockSize]
-		ciphertext = ciphertext[aes.BlockSize:]
-
-		stream := cipher.NewCFBDecrypter(block, iv)
-		stream.XORKeyStream(ciphertext, ciphertext)
-
-		return fmt.Sprintf("%s", ciphertext), nil
-	*/
 	return decryptedText, nil
 }
 
 func (cipher256 *cipherAES256) DecryptBLOB(dataIn []byte) (string, error) {
-	if cipher256.IsKeyGenerated() == false {
-		return "", formError(BSENCRPT0001EncKeyIsNotSet, aes256, "DecryptBLOB")
-	}
 
 	dataOut, err := cipher256.DecryptBIN(dataIn)
 	if err != nil {
@@ -174,11 +137,15 @@ func (cipher256 *cipherAES256) DecryptBLOB(dataIn []byte) (string, error) {
 }
 
 func (cipher256 *cipherAES256) DecryptBIN(dataIn []byte) (dataOut []byte, err error) {
-	if cipher256.IsKeyGenerated() == false {
-		return nil, formError(BSENCRPT0001EncKeyIsNotSet, aes256, "DecryptBIN")
+	if cipher256.isPasswordSet() == false {
+		return nil, formError(BSENCRPT0001EncKeyIsNotSet, cAES256TextDescription, "DecryptBIN")
+	}
+	generatedKey, err := scrypt.Key(cipher256.passwordKey, nil, cLoops, 8, 1, cAESKeyLength)
+	if err != nil {
+		return nil, err
 	}
 
-	block, err := aes.NewCipher(cipher256.generatedKey)
+	block, err := aes.NewCipher(generatedKey)
 
 	if err != nil {
 		return nil, err

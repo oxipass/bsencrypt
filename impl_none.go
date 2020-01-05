@@ -11,7 +11,7 @@ type cypherNONE struct {
 func (cypher *cypherNONE) CleanAndInit() {
 }
 
-func (cypher cypherNONE) GetGryptID() string {
+func (cypher cypherNONE) GetCryptID() string {
 	return cryptIDNONE
 }
 
@@ -19,7 +19,7 @@ func (cypher cypherNONE) GetCipherName() string {
 	return humanCryptNone
 }
 
-func (cypher *cypherNONE) SetPassword(password string) error {
+func (cypher *cypherNONE) SetPassword(_ string) error {
 	return nil
 }
 
@@ -47,14 +47,10 @@ func (cypher *cypherNONE) DecryptBIN(inData []byte) ([]byte, error) {
 	return inData, nil
 }
 
-func (cypher cypherNONE) IsKeyGenerated() bool {
-	return true
-}
-
 func (cypher *cypherNONE) Encrypt(text string) (string, error) {
 	return text, nil
 }
 
-func (cypher *cypherNONE) Decrypt(cryptedText string) (string, error) {
-	return cryptedText, nil
+func (cypher *cypherNONE) Decrypt(encryptedText string) (string, error) {
+	return encryptedText, nil
 }
