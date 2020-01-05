@@ -63,7 +63,7 @@ func (cipher256 *cipherAES256) SetPasswordKey(keyDataIn []byte) (err error) {
 	return nil
 }
 
-func (cipher256 cipherAES256) isPasswordSet() bool {
+func (cipher256 cipherAES256) IsPasswordSet() bool {
 	if cipher256.passwordKey == nil {
 		return false
 	}
@@ -89,7 +89,7 @@ func (cipher256 *cipherAES256) EncryptBLOB(text string) ([]byte, error) {
 }
 
 func (cipher256 *cipherAES256) EncryptBIN(inData []byte) (outData []byte, err error) {
-	if cipher256.isPasswordSet() == false {
+	if cipher256.IsPasswordSet() == false {
 		return nil, formError(BSENCRPT0001EncKeyIsNotSet)
 	}
 
@@ -137,7 +137,7 @@ func (cipher256 *cipherAES256) DecryptBLOB(dataIn []byte) (string, error) {
 }
 
 func (cipher256 *cipherAES256) DecryptBIN(dataIn []byte) (dataOut []byte, err error) {
-	if cipher256.isPasswordSet() == false {
+	if cipher256.IsPasswordSet() == false {
 		return nil, formError(BSENCRPT0001EncKeyIsNotSet, cAES256TextDescription, "DecryptBIN")
 	}
 	generatedKey, err := scrypt.Key(cipher256.passwordKey, nil, cLoops, 8, 1, cAESKeyLength)

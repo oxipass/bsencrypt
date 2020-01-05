@@ -27,6 +27,9 @@ func (cypher *cypherNONE) SetPasswordKey(passKey []byte) error {
 	cypher.passwordKey = passKey
 	return nil
 }
+func (cypher cypherNONE) IsPasswordSet() bool {
+	return true
+}
 
 func (cypher *cypherNONE) GetPasswordKey() []byte {
 	return cypher.passwordKey

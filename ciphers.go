@@ -6,11 +6,11 @@ package bsencrypt
 type BSCipher interface {
 	CleanAndInit() // Full clean and initialization of the entity
 
-	// SetPassword or SetKey shoudld be called before using ecnrytption
+	// SetPassword  should be called before using encryption
 	SetPassword(string) error    // Password should be set before starting encryption/decryption
 	SetPasswordKey([]byte) error // Setting key from bytes array
 	GetPasswordKey() []byte      // Get password current key
-	//IsKeyGenerated() bool        // Check if key is available and encryption/decryption is possible
+	IsPasswordSet() bool         // Check if password is set and entity is ready to work
 
 	Encrypt(string) (string, error) // Encrypt string, return encrypted base64 string
 	Decrypt(string) (string, error) // Decrypt string, encrypted base64 string should be provided as input
