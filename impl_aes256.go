@@ -104,11 +104,13 @@ func (cipher256 *cipherAES256) EncryptBIN(inData []byte) (outData []byte, err er
 
 	block, err := aes.NewCipher(cipher256.cachedFinalKey)
 	if err != nil {
+		cipher256.cachedFinalKey = nil // Clear cache in case of failure
 		return nil, formError("aes.NewCipher", err.Error())
 	}
 	encryptedData := make([]byte, aes.BlockSize+len(inData))
 	iv := encryptedData[:aes.BlockSize]
 	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		cipher256.cachedFinalKey = nil // Clear cache in case of failure
 		return nil, formError("ReadFull", err.Error())
 	}
 	stream := cipher.NewCFBEncrypter(block, iv)
@@ -155,10 +157,12 @@ func (cipher256 *cipherAES256) DecryptBIN(dataIn []byte) (dataOut []byte, err er
 	block, err := aes.NewCipher(cipher256.cachedFinalKey)
 
 	if err != nil {
+		cipher256.cachedFinalKey = nil // Clear cache in case of failure
 		return nil, err
 	}
 
 	if len(dataIn) < aes.BlockSize {
+		cipher256.cachedFinalKey = nil // Clear cache in case of failure
 		return nil, errors.New("Cipher text is too short for AES")
 	}
 
