@@ -19,11 +19,13 @@ const cPassSalt = "DJLiw3;!"
 const cLoops = 32768 // Increase it with computer power
 
 type cipherAES256 struct {
-	passwordKey []byte
+	passwordKey    []byte
+	cachedFinalKey []byte
 }
 
 func (cipher256 *cipherAES256) CleanAndInit() {
 	cipher256.passwordKey = nil
+	cipher256.cachedFinalKey = nil
 }
 
 func (cipher256 cipherAES256) GetCryptID() string {
@@ -93,11 +95,14 @@ func (cipher256 *cipherAES256) EncryptBIN(inData []byte) (outData []byte, err er
 		return nil, formError(BSENCRPT0001EncKeyIsNotSet)
 	}
 
-	generatedKey, err := scrypt.Key(cipher256.passwordKey, nil, cLoops, 8, 1, cAESKeyLength)
-	if err != nil {
-		return nil, err
+	if cipher256.cachedFinalKey == nil {
+		cipher256.cachedFinalKey, err = scrypt.Key(cipher256.passwordKey, nil, cLoops, 8, 1, cAESKeyLength)
+		if err != nil {
+			return nil, err
+		}
 	}
-	block, err := aes.NewCipher(generatedKey)
+
+	block, err := aes.NewCipher(cipher256.cachedFinalKey)
 	if err != nil {
 		return nil, formError("aes.NewCipher", err.Error())
 	}
@@ -112,8 +117,8 @@ func (cipher256 *cipherAES256) EncryptBIN(inData []byte) (outData []byte, err er
 	return encryptedData, nil
 }
 
-func (cipher256 *cipherAES256) Decrypt(cryptedText string) (string, error) {
-	dataIn, err := base64.URLEncoding.DecodeString(cryptedText)
+func (cipher256 *cipherAES256) Decrypt(encryptedText string) (string, error) {
+	dataIn, err := base64.URLEncoding.DecodeString(encryptedText)
 
 	if err != nil {
 		return "", err
@@ -140,12 +145,14 @@ func (cipher256 *cipherAES256) DecryptBIN(dataIn []byte) (dataOut []byte, err er
 	if cipher256.IsPasswordSet() == false {
 		return nil, formError(BSENCRPT0001EncKeyIsNotSet, cAES256TextDescription, "DecryptBIN")
 	}
-	generatedKey, err := scrypt.Key(cipher256.passwordKey, nil, cLoops, 8, 1, cAESKeyLength)
-	if err != nil {
-		return nil, err
+	if cipher256.cachedFinalKey == nil {
+		cipher256.cachedFinalKey, err = scrypt.Key(cipher256.passwordKey, nil, cLoops, 8, 1, cAESKeyLength)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	block, err := aes.NewCipher(generatedKey)
+	block, err := aes.NewCipher(cipher256.cachedFinalKey)
 
 	if err != nil {
 		return nil, err
