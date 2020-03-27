@@ -94,13 +94,10 @@ func TestShortEncryptionString(t *testing.T) {
 }
 
 func EncryptionCheckHelper(t *testing.T, minLen int, maxLen int) {
-	password := ""
-	plainText := ""
-
 	for _, cipher := range Ciphers {
 		cipher.CleanAndInit()
-		password = generateRandomString(1, 20)
-		plainText = generateRandomString(minLen, maxLen)
+		password := generateRandomString(1, 20)
+		plainText := generateRandomString(minLen, maxLen)
 		err := cipher.SetPassword(password)
 		if err != nil {
 			t.Errorf("Cipher: %s, SetPassword (%s) error: %s",
@@ -131,7 +128,6 @@ func EncryptionCheckHelper(t *testing.T, minLen int, maxLen int) {
 				cipher.GetCipherName(), password, plainText, decryptedText)
 		}
 	}
-
 }
 
 // TestMediumEncryptionData - encrypt/decrypt the strings with the length from 10 to 100

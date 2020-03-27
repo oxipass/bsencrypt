@@ -2,16 +2,15 @@ package bsencrypt
 
 import "testing"
 
-const cAES256InitialText = "23nrn 2rjnc87smlk,d4of9`94384;"
-const cAES256Password = "Mj577;tf,QQ"
-
 func TestAES256EncryptDecrypt(t *testing.T) {
 	var aesWrapper cipherAES256
-	err := aesWrapper.SetPassword(cAES256Password)
+	genInitialText := generateRandomString(40, 100)
+	genPass := generateRandomString(5, 32)
+	err := aesWrapper.SetPassword(genPass)
 	if err != nil {
 		t.Error(err.Error())
 	}
-	encryptedString, err := aesWrapper.Encrypt(cAES256InitialText)
+	encryptedString, err := aesWrapper.Encrypt(genInitialText)
 	if err != nil {
 		t.Error(err.Error())
 	}
@@ -19,18 +18,20 @@ func TestAES256EncryptDecrypt(t *testing.T) {
 	if err != nil {
 		t.Error(err.Error())
 	}
-	if cAES256InitialText != decryptedText {
-		t.Errorf("Expected %s, retrieved %s", cAES256InitialText, decryptedText)
+	if genInitialText != decryptedText {
+		t.Errorf("Expected %s, retrieved %s", genInitialText, decryptedText)
 	}
 }
 
 func TestAES256CheckClean(t *testing.T) {
 	var aesWrapper cipherAES256
-	err := aesWrapper.SetPassword(cAES256Password)
+	genInitialText := generateRandomString(40, 100)
+	genPass := generateRandomString(5, 32)
+	err := aesWrapper.SetPassword(genPass)
 	if err != nil {
 		t.Error(err.Error())
 	}
-	encryptedString, err := aesWrapper.Encrypt(cAES256InitialText)
+	encryptedString, err := aesWrapper.Encrypt(genInitialText)
 	if err != nil {
 		t.Error(err)
 	}
@@ -38,8 +39,8 @@ func TestAES256CheckClean(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if cAES256InitialText != decryptedText {
-		t.Errorf("Expected %s, retrieved %s", cAES256InitialText, decryptedText)
+	if genInitialText != decryptedText {
+		t.Errorf("Expected %s, retrieved %s", genInitialText, decryptedText)
 	}
 	aesWrapper.CleanAndInit()
 	decryptedText, err = aesWrapper.Decrypt(encryptedString)
