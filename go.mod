@@ -1,5 +1,7 @@
 module github.com/bykovme/bsencrypt
 
-go 1.14
+go 1.15
 
-require golang.org/x/crypto v0.0.0-20200323165209-0ec3e9974c59
+replace golang.org/x/crypto => github.com/golang/crypto v0.0.0-20201203163018-be400aefbc4c
+
+require golang.org/x/crypto v0.0.0-20201203163018-be400aefbc4c
