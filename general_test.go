@@ -60,7 +60,7 @@ func TestRandomBytesGeneratorFailure(t *testing.T) {
 func TestCypherNamesAndIDs(t *testing.T) {
 	for _, cipher := range Ciphers {
 		if len(cipher.GetCryptID()) == 0 {
-			t.Errorf("Crypt ID cannot be emtpy, should be 8")
+			t.Errorf("Crypt ID cannot be empty, should be 8")
 		} else if len(cipher.GetCryptID()) != 8 {
 			t.Errorf("Wrong length of crypt ID, should be 8, CryptID: %s", cipher.GetCryptID())
 		}

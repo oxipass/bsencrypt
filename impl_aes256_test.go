@@ -43,7 +43,7 @@ func TestAES256CheckClean(t *testing.T) {
 		t.Errorf("Expected %s, retrieved %s", genInitialText, decryptedText)
 	}
 	aesWrapper.CleanAndInit()
-	decryptedText, err = aesWrapper.Decrypt(encryptedString)
+	_, err = aesWrapper.Decrypt(encryptedString)
 	if err == nil {
 		t.Error("Expected decryption error, retrieved nil")
 	}
