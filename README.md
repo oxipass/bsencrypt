@@ -10,6 +10,6 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=oxipass_bsencrypt&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=oxipass_bsencrypt)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=oxipass_bsencrypt&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=oxipass_bsencrypt)
 
-# OxiPass Encrypt Library
+# OxiPass Encryption Library
 
 Encryption package with implementation of multiple standard encryption algorithms

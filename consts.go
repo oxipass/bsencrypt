@@ -1,4 +1,4 @@
-package bsencrypt
+package oxicrypt
 
 // Rules for errors definition
 // Example BSENCRPT00001: Password is not set

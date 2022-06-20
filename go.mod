@@ -1,4 +1,4 @@
-module github.com/oxipass/bsencrypt
+module github.com/oxipass/oxicrypt
 
 go 1.18
 

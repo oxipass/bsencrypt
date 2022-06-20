@@ -1,4 +1,4 @@
-package bsencrypt
+package oxicrypt
 
 // !! IMPORTANT !! Do not change this interface as the change will impact available implementations
 

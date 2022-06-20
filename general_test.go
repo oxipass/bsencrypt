@@ -1,4 +1,4 @@
-package bsencrypt
+package oxicrypt
 
 import (
 	"math/rand"

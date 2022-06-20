@@ -1,4 +1,4 @@
-package bsencrypt
+package oxicrypt
 
 // No encryption consts
 const cryptIDNONE = "7LD92APW"
