@@ -22,6 +22,18 @@ func TestRandomStringGenerator(t *testing.T) {
 	}
 }
 
+func TestSaltGenerator(t *testing.T) {
+	rand.Seed(time.Now().UTC().UnixNano())
+	salt := generateSalt()
+	if len(salt) != cSaltLength {
+		t.Errorf("wrong salt length")
+	}
+	salt2 := generateSalt()
+	if salt == salt2 {
+		t.Errorf("duplication of the salt")
+	}
+}
+
 func TestRandomStringGeneratorWrongInput(t *testing.T) {
 	rand.Seed(time.Now().UTC().UnixNano())
 	lenTo := rand.Intn(50)

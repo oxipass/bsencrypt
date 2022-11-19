@@ -2,8 +2,9 @@ package oxicrypt
 
 import (
 	"errors"
+	"log"
 	"math/rand"
-	"unicode/utf8"
+	"strings"
 )
 
 func formError(errorID string, errorText ...string) error {
@@ -18,28 +19,49 @@ func formError(errorID string, errorText ...string) error {
 	return errors.New(errorID + ": " + finalText)
 }
 
+const cAlphaNum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()_+=-[]{};:|,./<>?~"
+
+const cMaxLen = len(cAlphaNum)
+
 func generateRandomString(lenFrom, lenTo int) string {
 	lenMax := lenTo - lenFrom
-
 	if lenMax <= 0 {
 		return ""
 	}
 
-	const alphanum = "0123456789" +
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
-		"§±!@#$%^&*()_+=-[]{};'\\:\"|,./<>?`~" +
-		"йцукенгшщзхъфывапролджэёячсмитьбю№ЙЦУКЕНГШЩЗХЪЁЭЖДЛОРПАВЫФЯЧСМИТЬБЮ"
-	anLen := byte(utf8.RuneCountInString(alphanum))
-
 	lenMax = rand.Intn(lenMax) + lenFrom
+	log.Printf("LenMax: %d", lenMax)
+	i := 0
+	var builder strings.Builder
 
-	var bytes = make([]byte, lenMax)
-	rand.Read(bytes)
-	finalString := ""
-	for _, b := range bytes {
-		finalString = finalString + string([]rune(alphanum)[b%anLen])
+	for i < lenMax {
+		randI := rand.Intn(cMaxLen)
+		symbol := cAlphaNum[randI]
+		_, err := builder.WriteString(string(symbol))
+		if err != nil {
+			log.Println(err)
+			return builder.String()
+		}
+		i++
 	}
-	return finalString
+	return builder.String()
+}
+
+func generateSalt() string {
+	var builder strings.Builder
+	i := 0
+
+	for i < cSaltLength {
+		randI := rand.Intn(cMaxLen)
+		symbol := cAlphaNum[randI]
+		_, err := builder.WriteString(string(symbol))
+		if err != nil {
+			log.Println(err)
+			return builder.String()
+		}
+		i++
+	}
+	return builder.String()
 }
 
 func generateRandomBytesWithRandomLen(lenFrom, lenTo int) []byte {

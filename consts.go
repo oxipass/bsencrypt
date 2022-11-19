@@ -12,5 +12,7 @@ package oxicrypt
 // BSENCRPT0001EncKeyIsNotSet - BSENCRPT0001: Password is not set, encryption/decryption is not possible
 const BSENCRPT0001EncKeyIsNotSet = "BSENCRPT0001: Encryption key is not created, encryption/decryption is not possible"
 
-//BSENCRPT0002WrongKeyLength - BSENCRPT0002: key length is wrong
+// BSENCRPT0002WrongKeyLength - BSENCRPT0002: key length is wrong
 const BSENCRPT0002WrongKeyLength = "BSENCRPT0002: key length is wrong"
+
+const cSaltLength = 8

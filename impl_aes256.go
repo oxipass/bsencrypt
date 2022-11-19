@@ -28,11 +28,11 @@ func (cipher256 *cipherAES256) CleanAndInit() {
 	cipher256.cachedFinalKey = nil
 }
 
-func (cipher256 cipherAES256) GetCryptID() string {
+func (cipher256 *cipherAES256) GetCryptID() string {
 	return cCryptIDAES25601
 }
 
-func (cipher256 cipherAES256) GetCipherName() string {
+func (cipher256 *cipherAES256) GetCipherName() string {
 	return cAES256TextDescription
 }
 func (cipher256 *cipherAES256) SetPassword(password string) (err error) {
@@ -45,7 +45,7 @@ func (cipher256 *cipherAES256) SetPassword(password string) (err error) {
 	return nil
 }
 
-func (cipher256 cipherAES256) makePasswordKey(password string) (keyDataOut []byte) {
+func (cipher256 *cipherAES256) makePasswordKey(password string) (keyDataOut []byte) {
 	passWithSalt := password + cPassSalt
 	for len(passWithSalt) < cAESKeyLength {
 		passWithSalt += passWithSalt
@@ -53,7 +53,7 @@ func (cipher256 cipherAES256) makePasswordKey(password string) (keyDataOut []byt
 	return []byte(passWithSalt)
 }
 
-func (cipher256 cipherAES256) GetPasswordKey() []byte {
+func (cipher256 *cipherAES256) GetPasswordKey() []byte {
 	return cipher256.passwordKey
 }
 
@@ -65,7 +65,7 @@ func (cipher256 *cipherAES256) SetPasswordKey(keyDataIn []byte) (err error) {
 	return nil
 }
 
-func (cipher256 cipherAES256) IsPasswordSet() bool {
+func (cipher256 *cipherAES256) IsPasswordSet() bool {
 	if cipher256.passwordKey == nil {
 		return false
 	}
