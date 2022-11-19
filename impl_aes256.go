@@ -15,8 +15,7 @@ import (
 const cCryptIDAES25601 = "8GA63DMN"
 const cAES256TextDescription = "AES256V1"
 const cAESKeyLength = 32 // AES-256
-const cPassSalt = "DJLiw3;!"
-const cLoops = 32768 // Increase it with computer power
+const cLoops = 32768     // Increase it with computer power
 
 type cipherAES256 struct {
 	passwordKey    []byte
@@ -46,11 +45,11 @@ func (cipher256 *cipherAES256) SetPassword(password string) (err error) {
 }
 
 func (cipher256 *cipherAES256) makePasswordKey(password string) (keyDataOut []byte) {
-	passWithSalt := password + cPassSalt
-	for len(passWithSalt) < cAESKeyLength {
-		passWithSalt += passWithSalt
+
+	for len(password) < cAESKeyLength {
+		password += password
 	}
-	return []byte(passWithSalt)
+	return []byte(password)
 }
 
 func (cipher256 *cipherAES256) GetPasswordKey() []byte {
@@ -163,7 +162,7 @@ func (cipher256 *cipherAES256) DecryptBIN(dataIn []byte) (dataOut []byte, err er
 
 	if len(dataIn) < aes.BlockSize {
 		cipher256.cachedFinalKey = nil // Clear cache in case of failure
-		return nil, errors.New("Cipher text is too short for AES")
+		return nil, errors.New("cipher text is too short for AES")
 	}
 
 	iv := dataIn[:aes.BlockSize]

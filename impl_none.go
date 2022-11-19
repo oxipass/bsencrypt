@@ -11,11 +11,11 @@ type cypherNONE struct {
 func (cypher *cypherNONE) CleanAndInit() {
 }
 
-func (cypher cypherNONE) GetCryptID() string {
+func (cypher *cypherNONE) GetCryptID() string {
 	return cryptIDNONE
 }
 
-func (cypher cypherNONE) GetCipherName() string {
+func (cypher *cypherNONE) GetCipherName() string {
 	return humanCryptNone
 }
 
@@ -27,7 +27,7 @@ func (cypher *cypherNONE) SetPasswordKey(passKey []byte) error {
 	cypher.passwordKey = passKey
 	return nil
 }
-func (cypher cypherNONE) IsPasswordSet() bool {
+func (cypher *cypherNONE) IsPasswordSet() bool {
 	return true
 }
 
