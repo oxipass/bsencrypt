@@ -70,15 +70,15 @@ func TestRandomBytesGeneratorFailure(t *testing.T) {
 }
 
 func TestCypherNamesAndIDs(t *testing.T) {
-	for _, cipher := range Ciphers {
-		if len(cipher.GetCryptID()) == 0 {
-			t.Errorf("Crypt ID cannot be empty, should be 8")
-		} else if len(cipher.GetCryptID()) != 8 {
-			t.Errorf("Wrong length of crypt ID, should be 8, CryptID: %s", cipher.GetCryptID())
+	for _, cipher := range GetCiphers() {
+		if len(cipher.ID) == 0 {
+			t.Errorf("Crypt ID cannot be empty, its length should be 8 symbols")
+		} else if len(cipher.ID) != 8 {
+			t.Errorf("Wrong length of crypt ID, should be 8, CryptID: %s", cipher.ID)
 		}
-		if len(cipher.GetCipherName()) == 0 {
+		if len(cipher.Description) == 0 {
 			t.Errorf("Human readable cipher name is empty, should be at least 3 symbols")
-		} else if len(cipher.GetCipherName()) < 3 {
+		} else if len(cipher.Description) < 3 {
 			t.Errorf("Human readable cipher name should be at least 3 symbols")
 		}
 
@@ -106,7 +106,12 @@ func TestShortEncryptionString(t *testing.T) {
 }
 
 func EncryptionCheckHelper(t *testing.T, minLen int, maxLen int) {
-	for _, cipher := range Ciphers {
+	for _, cipherInfo := range GetCiphers() {
+		cipher, errCipher := GetOxiCipher(cipherInfo.ID)
+		if errCipher != nil {
+			t.Error(errCipher.Error())
+			continue
+		}
 		cipher.CleanAndInit()
 		password := generateRandomString(1, 20)
 		plainText := generateRandomString(minLen, maxLen)
