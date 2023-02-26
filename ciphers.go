@@ -2,8 +2,8 @@ package oxicrypt
 
 // !! IMPORTANT !! Do not change this interface as the change will impact available implementations
 
-// BSCipher - Cipher interface, implement all the methods to attach new cypher to bykovstorage
-type BSCipher interface {
+// OxiCipher - Cipher interface, implement all the methods to attach new cipher to storage
+type OxiCipher interface {
 	CleanAndInit() // Full clean and initialization of the entity
 
 	// SetPassword  should be called before using encryption
@@ -23,10 +23,4 @@ type BSCipher interface {
 
 	GetCryptID() string    // Unique ID of cipher implementation, use any alphanumeric symbols, 8 chars
 	GetCipherName() string // Human readable name of the implemented cypher
-}
-
-// Ciphers - Add newly implemented cyphers here with `Cyphers append(Cyphers, new(cypherImplementationHere))`
-var Ciphers = []BSCipher{
-	new(cipherAES256), // AES256 internal implementation
-	new(cypherNONE),   // No encryption
 }

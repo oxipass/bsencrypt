@@ -1,59 +1,58 @@
 package oxicrypt
 
-// No encryption consts
-const cryptIDNONE = "7LD92APW"
-const humanCryptNone = "NONE"
+const cNoneId = "7LD92APW"
+const cNoneDescription = "NONE"
 
-type cypherNONE struct {
+type cipherNONE struct {
 	passwordKey []byte
 }
 
-func (cypher *cypherNONE) CleanAndInit() {
+func (cipher *cipherNONE) CleanAndInit() {
 }
 
-func (cypher *cypherNONE) GetCryptID() string {
-	return cryptIDNONE
+func (cipher *cipherNONE) GetCryptID() string {
+	return cNoneId
 }
 
-func (cypher *cypherNONE) GetCipherName() string {
-	return humanCryptNone
+func (cipher *cipherNONE) GetCipherName() string {
+	return cNoneDescription
 }
 
-func (cypher *cypherNONE) SetPassword(_ string) error {
+func (cipher *cipherNONE) SetPassword(_ string) error {
 	return nil
 }
 
-func (cypher *cypherNONE) SetPasswordKey(passKey []byte) error {
-	cypher.passwordKey = passKey
+func (cipher *cipherNONE) SetPasswordKey(passKey []byte) error {
+	cipher.passwordKey = passKey
 	return nil
 }
-func (cypher *cypherNONE) IsPasswordSet() bool {
+func (cipher *cipherNONE) IsPasswordSet() bool {
 	return true
 }
 
-func (cypher *cypherNONE) GetPasswordKey() []byte {
-	return cypher.passwordKey
+func (cipher *cipherNONE) GetPasswordKey() []byte {
+	return cipher.passwordKey
 }
 
-func (cypher *cypherNONE) EncryptBLOB(inStr string) ([]byte, error) {
+func (cipher *cipherNONE) EncryptBLOB(inStr string) ([]byte, error) {
 	return []byte(inStr), nil
 }
 
-func (cypher *cypherNONE) DecryptBLOB(inData []byte) (string, error) {
+func (cipher *cipherNONE) DecryptBLOB(inData []byte) (string, error) {
 	return string(inData[:]), nil
 }
 
-func (cypher *cypherNONE) EncryptBIN(inData []byte) ([]byte, error) {
+func (cipher *cipherNONE) EncryptBIN(inData []byte) ([]byte, error) {
 	return inData, nil
 }
-func (cypher *cypherNONE) DecryptBIN(inData []byte) ([]byte, error) {
+func (cipher *cipherNONE) DecryptBIN(inData []byte) ([]byte, error) {
 	return inData, nil
 }
 
-func (cypher *cypherNONE) Encrypt(text string) (string, error) {
+func (cipher *cipherNONE) Encrypt(text string) (string, error) {
 	return text, nil
 }
 
-func (cypher *cypherNONE) Decrypt(encryptedText string) (string, error) {
+func (cipher *cipherNONE) Decrypt(encryptedText string) (string, error) {
 	return encryptedText, nil
 }

@@ -58,7 +58,7 @@ func (cipher256 *cipherAES256) GetPasswordKey() []byte {
 
 func (cipher256 *cipherAES256) SetPasswordKey(keyDataIn []byte) (err error) {
 	if len(keyDataIn) < cAESKeyLength {
-		return formError(BSENCRPT0002WrongKeyLength, cAES256TextDescription, "SetPasswordKey", "Key length must be  at least 32 bytes")
+		return formError(OXICRPT002wrongKeyLength, cAES256TextDescription, "SetPasswordKey", "Key length must be  at least 32 bytes")
 	}
 	cipher256.passwordKey = keyDataIn
 	return nil
@@ -91,7 +91,7 @@ func (cipher256 *cipherAES256) EncryptBLOB(text string) ([]byte, error) {
 
 func (cipher256 *cipherAES256) EncryptBIN(inData []byte) (outData []byte, err error) {
 	if cipher256.IsPasswordSet() == false {
-		return nil, formError(BSENCRPT0001EncKeyIsNotSet)
+		return nil, formError(OXICRPT001encKeyIsNotSet)
 	}
 
 	if cipher256.cachedFinalKey == nil {
@@ -144,7 +144,7 @@ func (cipher256 *cipherAES256) DecryptBLOB(dataIn []byte) (string, error) {
 
 func (cipher256 *cipherAES256) DecryptBIN(dataIn []byte) (dataOut []byte, err error) {
 	if cipher256.IsPasswordSet() == false {
-		return nil, formError(BSENCRPT0001EncKeyIsNotSet, cAES256TextDescription, "DecryptBIN")
+		return nil, formError(OXICRPT001encKeyIsNotSet, cAES256TextDescription, "DecryptBIN")
 	}
 	if cipher256.cachedFinalKey == nil {
 		cipher256.cachedFinalKey, err = scrypt.Key(cipher256.passwordKey, nil, cLoops, 8, 1, cAESKeyLength)
