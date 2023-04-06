@@ -4,7 +4,7 @@ import "testing"
 
 func TestNoneEncrypt(t *testing.T) {
 	// As there is no encryption, check if it is the same
-	var none cypherNONE
+	var none cipherNONE
 	genInitialText := generateRandomString(40, 100)
 	genPass := generateRandomString(5, 32)
 	err := none.SetPassword(genPass)
